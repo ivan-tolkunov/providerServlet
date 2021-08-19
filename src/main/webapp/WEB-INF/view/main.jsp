@@ -1,4 +1,9 @@
-<%--
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="ua.ivan.provider.model.SitePackage" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="ua.ivan.provider.model.User" %>
+<%@ page import="ua.ivan.provider.model.Role" %><%--
   Created by IntelliJ IDEA.
   User: memlo
   Date: 8/18/2021
@@ -45,6 +50,7 @@
     </style>
 </head>
 <body>
+<%User user = (User)request.getSession().getAttribute("user");%>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -52,11 +58,13 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="@{/auth/main}">Main page</a>
                 </li>
+                <% if (user.getRole().equals(Role.ADMIN)) { %>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin">Admin Panel</a>
+                    </li>
+                <% } %>
                 <li class="nav-item">
-                    <a class="nav-link active" href="@{/admin}">Admin Panel</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#" href="@{/user}">Email</a>
+                    <a class="nav-link active" href="/user"><%=user.getEmail()%></a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
@@ -112,6 +120,29 @@
         </ul>
     </div>
 </nav>
+
+<div class="content-site">
+    <div class="flex">
+        <%
+            List<SitePackage> sitePackages =
+                    (List<SitePackage>)request.getAttribute("sitePackages");
+            for(SitePackage p: sitePackages){%>
+        <div class="card border-dark mb-3 item" style="max-width: 18rem;">
+            <div class="card-header"><%=p.getType()%></div>
+            <div class="card-body text-dark">
+                <h5 class="card-title"><%=p.getName()%></h5>
+                <p class="card-text make-size"><%=p.getDescription()%></p>
+                <form action="/user/add" method="post">
+                    <input type="hidden" name="packageId" value='<%=p.getId()%>' />
+                    <input type="hidden" name="userId" value='<%=user.getId()%>' />
+                    <button type="submit" class="btn btn-primary" >Add</button>
+                </form>
+            </div>
+        </div>
+        <%}%>
+        <div class="item new-string"></div>
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
         crossorigin="anonymous"></script>

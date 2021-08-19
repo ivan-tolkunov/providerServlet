@@ -48,7 +48,7 @@
         </li>
     </ul>
 </nav>
-<form class="form-signin" method="post" action="/">
+<form class="form-signin" method="post" action="/main">
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 
     <label for="inputEmail" class="sr-only">Email</label>
