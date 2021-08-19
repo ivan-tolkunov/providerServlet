@@ -20,5 +20,8 @@ public class UserCabinetServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        User user = (User)req.getSession().getAttribute("user");
+        req.getSession().setAttribute("userSubs", userDAO.getUserPackages(user.getId()));
+        req.getRequestDispatcher("/WEB-INF/view/cabinet.jsp").forward(req, resp);
     }
 }

@@ -45,4 +45,32 @@ public class SitePackageDAO {
         }
         return sitePackages;
     }
+
+    public SitePackage getById(Long id) {
+        SitePackage sitePackage = new SitePackage();
+        try {
+            String query = "SELECT * FROM packages WHERE id = ?";
+            Connection con = ConnectionDatabase.initializeDatabase();
+            PreparedStatement st = con.prepareStatement(query);
+            st.setString(1, String.valueOf(id));
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                sitePackage.setId(Long.parseLong(rs.getString(1)));
+                sitePackage.setName(rs.getString(2));
+                sitePackage.setDescription(rs.getString(3));
+                sitePackage.setPrice(Integer.parseInt(rs.getString(4)));
+                sitePackage.setType(rs.getString(5));
+            }
+
+            rs.close();
+            st.close();
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return sitePackage;
+    }
 }

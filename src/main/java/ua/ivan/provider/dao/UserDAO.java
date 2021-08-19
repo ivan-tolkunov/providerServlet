@@ -190,5 +190,37 @@ public class UserDAO {
         return sitePackages;
     }
 
+    public boolean buyUserPackage(Long userId, SitePackage sitePackage) {
+        try {
+            Connection con = ConnectionDatabase.initializeDatabase();
+            User user = getById(userId);
+            user.setBalance(getById(userId).getBalance() - sitePackage.getPrice());
+            if (user.getBalance() >= 0) {
+                String query = "insert into subscribe (user_id, package_id)"
+                        + " values (?, ?)";
+                PreparedStatement st = con.prepareStatement(query);
+
+                st.setString (1, String.valueOf(userId));
+                st.setString (2, String.valueOf(sitePackage.getId()));
+                st.executeUpdate();
+                st.close();
+
+                query = "update user set balance = ? where id = ?";
+                st = con.prepareStatement(query);
+
+                st.setString (1, String.valueOf(user.getBalance()));
+                st.setString (2, String.valueOf(userId));
+                st.executeUpdate();
+                st.close();
+                return true;
+            }
+            con.close();
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
 
 }
