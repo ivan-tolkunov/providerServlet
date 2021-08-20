@@ -1,10 +1,7 @@
 package ua.ivan.provider.dao;
 
 import ua.ivan.provider.controller.ConnectionDatabase;
-import ua.ivan.provider.model.Role;
 import ua.ivan.provider.model.SitePackage;
-import ua.ivan.provider.model.Status;
-import ua.ivan.provider.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SitePackageDAO {
-
 
 
     public List<SitePackage> getAllPackages() {
@@ -72,5 +68,77 @@ public class SitePackageDAO {
         }
 
         return sitePackage;
+    }
+
+    public boolean addNewPackage(String name, String description, String price, String type) {
+        try {
+            String query = "insert into packages (name, description, price, type)"
+                    + " values (?, ?, ?, ?)";
+            Connection con = ConnectionDatabase.initializeDatabase();
+            PreparedStatement st = con.prepareStatement(query);
+            st.setString(1, name);
+            st.setString(2, description);
+            st.setString(3, price);
+            st.setString(4, type);
+            st.executeUpdate();
+
+            st.close();
+            con.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deletePackageById(String id) {
+        try {
+            String query = "delete from subscribe where package_id = ?";
+            Connection con = ConnectionDatabase.initializeDatabase();
+            PreparedStatement st = con.prepareStatement(query);
+            st.setString(1, id);
+            st.execute();
+            query = "delete from packages where id = ?";
+            st = con.prepareStatement(query);
+            st.setString(1, id);
+            st.execute();
+
+            st.close();
+            con.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean editPackage(String id, String name, String description, String price, String type) {
+        try {
+            String query = "update packages set name = ?, description = ?, price = ?, type = ? where id = ?";
+            Connection con = ConnectionDatabase.initializeDatabase();
+            PreparedStatement st = con.prepareStatement(query);
+            st.setString(1, name);
+            st.setString(2, description);
+            st.setString(3, price);
+            st.setString(4, type);
+            st.setString(5, id);
+            st.executeUpdate();
+
+            st.close();
+            con.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -93,5 +93,54 @@
         <url-pattern>/user/unsub</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>AdminCabinet</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.AdminServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AdminCabinet</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EditPackage</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.EditPackageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>EditPackage</servlet-name>
+        <url-pattern>/admin/editPackagePage</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AddPackage</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.AddNewPackageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AddPackage</servlet-name>
+        <url-pattern>/admin/addPackage</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeletePackage</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.DeletePackageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DeletePackage</servlet-name>
+        <url-pattern>/admin/deletePackage</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EditFormPackage</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.EditPackageFormServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>EditFormPackage</servlet-name>
+        <url-pattern>/admin/editPackage</url-pattern>
+    </servlet-mapping>
 
 </web-app>
