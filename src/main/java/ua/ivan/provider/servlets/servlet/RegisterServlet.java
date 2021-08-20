@@ -1,6 +1,5 @@
 package ua.ivan.provider.servlets.servlet;
 
-import ua.ivan.provider.controller.ConnectionDatabase;
 import ua.ivan.provider.dao.UserDAO;
 
 import javax.servlet.ServletException;

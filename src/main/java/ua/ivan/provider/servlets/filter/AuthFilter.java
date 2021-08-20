@@ -14,7 +14,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import static java.util.Objects.nonNull;
 
 public class AuthFilter implements Filter {
-    UserDAO userDAO = new UserDAO();
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -31,7 +30,7 @@ public class AuthFilter implements Filter {
 
         final String email = req.getParameter("email");
         final String password = req.getParameter("password");
-        User user = userDAO.getUserByEmail(email);
+        User user = (User)req.getSession().getAttribute("user");
 
 
         @SuppressWarnings("unchecked")
@@ -48,14 +47,14 @@ public class AuthFilter implements Filter {
 
         } else if (dao.get().userIsExist(email, password)) {
 
-            final Role role = dao.get().getRoleByLoginPassword(email, password);
+            User userFirst = dao.get().getUserByEmail(email);
 
-            req.getSession().setAttribute("user", user);
-            req.getSession().setAttribute("password", user.getPassword());
-            req.getSession().setAttribute("email", user.getEmail());
-            req.getSession().setAttribute("role", role);
+            req.getSession().setAttribute("user", userFirst);
+            req.getSession().setAttribute("password", userFirst.getPassword());
+            req.getSession().setAttribute("email", userFirst.getEmail());
+            req.getSession().setAttribute("role", userFirst.getRole());
 
-            moveToMenu(req, res, role);
+            moveToMenu(req, res, userFirst.getRole());
 
         } else {
             moveToMenu(req, res, Role.UNKNOWN);

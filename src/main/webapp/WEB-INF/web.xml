@@ -83,5 +83,15 @@
         <url-pattern>/user</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>UserDeletePackageServlet</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.UserDeletePackageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UserDeletePackageServlet</servlet-name>
+        <url-pattern>/user/unsub</url-pattern>
+    </servlet-mapping>
+
 
 </web-app>

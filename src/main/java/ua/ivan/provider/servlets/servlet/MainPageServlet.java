@@ -13,6 +13,8 @@ public class MainPageServlet extends HttpServlet {
     private final SitePackageDAO sitePackageDAO = new SitePackageDAO();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("sitePackages", sitePackageDAO.getAllPackages());
+        req.getRequestDispatcher("/WEB-INF/view/main.jsp").forward(req, resp);
     }
 
     @Override

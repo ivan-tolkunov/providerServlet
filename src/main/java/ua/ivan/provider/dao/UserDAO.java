@@ -120,9 +120,9 @@ public class UserDAO {
                     + " values (?, ?, ?, ?)";
             PreparedStatement st = con.prepareStatement(query);
 
-            st.setString (1, email);
-            st.setString (2, firstName);
-            st.setString   (3, lastName);
+            st.setString(1, email);
+            st.setString(2, firstName);
+            st.setString(3, lastName);
             st.setString(4, password);
 
             st.executeUpdate();
@@ -165,20 +165,16 @@ public class UserDAO {
 
     public List<SitePackage> getUserPackages(Long userId) {
         List<SitePackage> sitePackages = new ArrayList<>();
+        SitePackageDAO sitePackageDAO = new SitePackageDAO();
         try {
             Connection con = ConnectionDatabase.initializeDatabase();
 
-            String query = "select * from packages natural join subscribe where subscribe.user_id = ?";
+            String query = "select * from subscribe where user_id = ?";
             PreparedStatement st = con.prepareStatement(query);
             st.setString(1, String.valueOf(userId));
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                SitePackage sitePackage = new SitePackage();
-                sitePackage.setId(Long.parseLong(rs.getString(1)));
-                sitePackage.setName(rs.getString(2));
-                sitePackage.setDescription(rs.getString(3));
-                sitePackage.setPrice(Integer.parseInt(rs.getString(4)));
-                sitePackage.setType(rs.getString(5));
+                SitePackage sitePackage = sitePackageDAO.getById(Long.parseLong(rs.getString(3)));
                 sitePackages.add(sitePackage);
             }
             st.close();
@@ -200,16 +196,16 @@ public class UserDAO {
                         + " values (?, ?)";
                 PreparedStatement st = con.prepareStatement(query);
 
-                st.setString (1, String.valueOf(userId));
-                st.setString (2, String.valueOf(sitePackage.getId()));
+                st.setString(1, String.valueOf(userId));
+                st.setString(2, String.valueOf(sitePackage.getId()));
                 st.executeUpdate();
                 st.close();
 
                 query = "update user set balance = ? where id = ?";
                 st = con.prepareStatement(query);
 
-                st.setString (1, String.valueOf(user.getBalance()));
-                st.setString (2, String.valueOf(userId));
+                st.setString(1, String.valueOf(user.getBalance()));
+                st.setString(2, String.valueOf(userId));
                 st.executeUpdate();
                 st.close();
                 return true;
@@ -220,6 +216,25 @@ public class UserDAO {
             e.printStackTrace();
         }
         return true;
+    }
+
+    public boolean deleteUserPackage(Long userId, Long packageId) {
+        try {
+            Connection con = ConnectionDatabase.initializeDatabase();
+
+            String query = "delete from subscribe where user_id = ? and package_id = ?";
+            PreparedStatement st = con.prepareStatement(query);
+
+            st.setString(1, String.valueOf(userId));
+            st.setString(2, String.valueOf(packageId));
+            st.execute();
+            st.close();
+            con.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
