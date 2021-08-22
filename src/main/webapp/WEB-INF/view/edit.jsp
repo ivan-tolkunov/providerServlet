@@ -72,7 +72,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <form action="/logout" method="post">
+                <form action="/logout" method="get">
                     <button class="btn btn-link" type="submit">Logout</button>
                 </form>
             </li>

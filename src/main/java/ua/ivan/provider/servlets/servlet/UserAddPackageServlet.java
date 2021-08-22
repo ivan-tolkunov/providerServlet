@@ -17,8 +17,9 @@ public class UserAddPackageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
             throws IOException, ServletException {
-        userDAO.buyUserPackage(Long.parseLong(request.getParameter("userId")),
-                sitePackageDAO.getById(Long.parseLong(request.getParameter("packageId"))));
+        request.getSession().setAttribute("user", userDAO.buyUserPackage(
+                Long.parseLong(request.getParameter("userId")),
+                sitePackageDAO.getById(Long.parseLong(request.getParameter("packageId")))));
         request.getRequestDispatcher("/user").forward(request, response);
     }
 }

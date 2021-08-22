@@ -8,7 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SitePackageDAO {
 
@@ -141,4 +143,28 @@ public class SitePackageDAO {
             return false;
         }
     }
+
+    public List<SitePackage> sortByMethodPackages(String method, List<SitePackage> packages) {
+        switch (String.valueOf(method)) {
+            case "A-Z":
+                return packages
+                        .stream()
+                        .sorted(Comparator.comparing(SitePackage::getName))
+                        .collect(Collectors.toList());
+            case "Z-A":
+                return packages
+                        .stream()
+                        .sorted(Comparator.comparing(SitePackage::getName).reversed())
+                        .collect(Collectors.toList());
+            case "price":
+                return packages
+                        .stream()
+                        .sorted(Comparator.comparing(SitePackage::getPrice))
+                        .collect(Collectors.toList());
+
+            default:
+                return packages;
+        }
+    }
+
 }

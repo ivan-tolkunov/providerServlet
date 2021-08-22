@@ -40,7 +40,7 @@
       </div>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/main">Main Page</a>
+      <a class="nav-link" href="/main">Back</a>
     </li>
   </ul>
 </nav>

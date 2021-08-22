@@ -84,6 +84,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>SortPackagesOnCabinetPageServlet</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.UserCabinetServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SortPackagesOnCabinetPageServlet</servlet-name>
+        <url-pattern>/user/sortPackages</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>UserDeletePackageServlet</servlet-name>
         <servlet-class>ua.ivan.provider.servlets.servlet.UserDeletePackageServlet</servlet-class>
     </servlet>
@@ -142,5 +152,46 @@
         <servlet-name>EditFormPackage</servlet-name>
         <url-pattern>/admin/editPackage</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Donate</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.DonateServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Donate</servlet-name>
+        <url-pattern>/donate</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DonateAction</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.DonateActionServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DonateAction</servlet-name>
+        <url-pattern>/donateAction</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserAction</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.UserActionServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UserAction</servlet-name>
+        <url-pattern>/changeUserStatus</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SortPackagesOnMainPageServlet</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.MainPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SortPackagesOnMainPageServlet</servlet-name>
+        <url-pattern>/main/sort</url-pattern>
+    </servlet-mapping>
+
 
 </web-app>

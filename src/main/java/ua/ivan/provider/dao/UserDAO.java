@@ -2,10 +2,7 @@ package ua.ivan.provider.dao;
 
 
 import ua.ivan.provider.controller.ConnectionDatabase;
-import ua.ivan.provider.model.Role;
-import ua.ivan.provider.model.SitePackage;
-import ua.ivan.provider.model.Status;
-import ua.ivan.provider.model.User;
+import ua.ivan.provider.model.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserDAO {
 
@@ -186,7 +184,7 @@ public class UserDAO {
         return sitePackages;
     }
 
-    public boolean buyUserPackage(Long userId, SitePackage sitePackage) {
+    public User buyUserPackage(Long userId, SitePackage sitePackage) {
         try {
             Connection con = ConnectionDatabase.initializeDatabase();
             User user = getById(userId);
@@ -200,22 +198,13 @@ public class UserDAO {
                 st.setString(2, String.valueOf(sitePackage.getId()));
                 st.executeUpdate();
                 st.close();
-
-                query = "update user set balance = ? where id = ?";
-                st = con.prepareStatement(query);
-
-                st.setString(1, String.valueOf(user.getBalance()));
-                st.setString(2, String.valueOf(userId));
-                st.executeUpdate();
-                st.close();
-                return true;
             }
             con.close();
-            return false;
+            return updateUserBalance(user.getBalance(), userId);
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return true;
     }
 
     public boolean deleteUserPackage(Long userId, Long packageId) {
@@ -236,6 +225,113 @@ public class UserDAO {
             return false;
         }
     }
+
+    public boolean makeDonateQuery(Long userId, int sum) {
+        try {
+            Connection con = ConnectionDatabase.initializeDatabase();
+
+            String query = "insert into donates (sum, user_id)"
+                    + "values (? ,?)";
+            PreparedStatement st = con.prepareStatement(query);
+            st.setString(1, String.valueOf(sum));
+            st.setString(2, String.valueOf(userId));
+            st.executeUpdate();
+            st.close();
+            con.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Donate> getAllDonateQuery() {
+        List<Donate> donates = new ArrayList<>();
+        try {
+            Connection con = ConnectionDatabase.initializeDatabase();
+
+            String query = "select * from donates";
+            PreparedStatement st = con.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Donate donate = new Donate();
+                donate.setId(Long.parseLong(rs.getString(1)));
+                donate.setSum(Integer.parseInt(rs.getString(2)));
+                donate.setUser(getById(Long.parseLong(rs.getString(3))));
+                donates.add(donate);
+            }
+            st.close();
+            con.close();
+            return donates;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public User acceptDonateQuery(Long userId, int sum, Long donateId) {
+        User user = getById(userId);
+        user.setBalance(user.getBalance() + sum);
+        rejectDonateQuery(donateId);
+        return updateUserBalance(user.getBalance(), userId);
+    }
+
+    public boolean rejectDonateQuery(Long donateId) {
+        try {
+            Connection con = ConnectionDatabase.initializeDatabase();
+
+            String query = "delete from donates where id = ?";
+            PreparedStatement st = con.prepareStatement(query);
+            st.setString(1, String.valueOf(donateId));
+            st.execute();
+            st.close();
+            con.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public User updateUserBalance(int balance, Long userId) {
+        try {
+            Connection con = ConnectionDatabase.initializeDatabase();
+            String query = "update user set balance = ? where id = ?";
+            PreparedStatement st = con.prepareStatement(query);
+
+            st.setString(1, String.valueOf(balance));
+            st.setString(2, String.valueOf(userId));
+            st.executeUpdate();
+            st.close();
+            return getById(userId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public User updateUserStatus(Long userId, Status status) {
+        try {
+            Connection con = ConnectionDatabase.initializeDatabase();
+            String query = "update user set status = ? where id = ?";
+            PreparedStatement st = con.prepareStatement(query);
+            st.setString(1, status.name());
+            st.setString(2, String.valueOf(userId));
+            st.executeUpdate();
+            st.close();
+            return getById(userId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean isSubscriber(Long userId, String type){
+        return getUserPackages(userId).stream().filter(p -> p.getType().equals(type)).collect(Collectors.toList()).isEmpty();
+    }
+
 
 
 }

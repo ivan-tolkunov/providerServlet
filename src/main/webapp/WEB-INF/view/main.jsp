@@ -70,14 +70,14 @@
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                        aria-haspopup="true" aria-expanded="false">Sort by:</a>
                     <div class="dropdown-menu" style="">
-                        <form action="#" action="@{/user/sortMain}" method="get">
-                            <button class="btn btn-link" type="submit" name="method" value="'A-Z'" >Sort by
+                        <form action="/main/sort" method="get">
+                            <button class="btn btn-link" type="submit" name="method" value="A-Z" >Sort by
                                 name(A-Z)
                             </button>
-                            <button class="btn btn-link" type="submit" name="method" value="'Z-A'">Sort by
-                                name(a-z)
+                            <button class="btn btn-link" type="submit" name="method" value="Z-A">Sort by
+                                name(Z-A)
                             </button>
-                            <button class="btn btn-link" type="submit" name="method" value="'price'">Sort by price
+                            <button class="btn btn-link" type="submit" name="method" value="price">Sort by price
                             </button>
                         </form>
                     </div>
@@ -100,9 +100,10 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                   aria-haspopup="true" aria-expanded="false">Balance:1337</a>
+                   aria-haspopup="true" aria-expanded="false">Balance: <%=user.getBalance()%></a>
                 <div class="dropdown-menu" style="">
-                    <form action="#" method="post">
+                    <form action="/donate" method="post">
+                        <input type="hidden" name="user_id" value='<%=user.getId()%>'>
                         <button class="btn btn-link" type="submit" name="sum" value="200">200 UAH
                         </button>
                         <button class="btn btn-link" type="submit" name="sum" value="500">500 UAH
