@@ -2,6 +2,7 @@ package ua.ivan.provider.servlets.filter;
 
 import ua.ivan.provider.dao.UserDAO;
 import ua.ivan.provider.model.Role;
+import ua.ivan.provider.model.Status;
 import ua.ivan.provider.model.User;
 
 import javax.servlet.*;
@@ -42,7 +43,7 @@ public class AuthFilter implements Filter {
                 nonNull(session.getAttribute("email")) &&
                 nonNull(session.getAttribute("password"))) {
 
-            moveToMenu(req, res, user.getRole());
+            moveToMenu(req, res, user);
 
 
         } else if (dao.get().userIsExist(email, password)) {
@@ -54,24 +55,28 @@ public class AuthFilter implements Filter {
             req.getSession().setAttribute("email", userFirst.getEmail());
             req.getSession().setAttribute("role", userFirst.getRole());
 
-            moveToMenu(req, res, userFirst.getRole());
+            moveToMenu(req, res, userFirst);
 
         } else {
-            moveToMenu(req, res, Role.UNKNOWN);
+            moveToMenu(req, res, new User());
         }
     }
 
     private void moveToMenu(final HttpServletRequest req,
                             final HttpServletResponse res,
-                            final Role role)
+                            final User user)
             throws ServletException, IOException {
 
 
-        if (role.equals(Role.ADMIN)) {
+        if (user.getRole().equals(Role.ADMIN)) {
             req.getRequestDispatcher("/main").forward(req, res);
 
-        } else if (role.equals(Role.USER)) {
-            req.getRequestDispatcher("/main").forward(req, res);
+        } else if (user.getRole().equals(Role.USER)) {
+            if (user.getStatus().equals(Status.ACTIVE)) {
+                req.getRequestDispatcher("/main").forward(req, res);
+            } else {
+                req.getRequestDispatcher("/donatePage").forward(req, res);
+            }
 
         } else {
             req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, res);

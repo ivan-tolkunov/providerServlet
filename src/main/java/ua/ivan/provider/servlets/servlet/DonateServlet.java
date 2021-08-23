@@ -1,6 +1,7 @@
 package ua.ivan.provider.servlets.servlet;
 
 import ua.ivan.provider.dao.UserDAO;
+import ua.ivan.provider.model.Status;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -19,6 +20,10 @@ public class DonateServlet extends HttpServlet {
                 Long.parseLong(request.getParameter("user_id")),
                 Integer.parseInt(request.getParameter("sum"))
         );
-        response.sendRedirect("/main");
+        if (userDAO.getById(Long.parseLong(request.getParameter("user_id"))).getStatus().equals(Status.ACTIVE)) {
+            response.sendRedirect("/main");
+        } else {
+            response.sendRedirect("/");
+        }
     }
 }

@@ -203,5 +203,15 @@
         <url-pattern>/download</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>DonateForm</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.DonatePageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DonateForm</servlet-name>
+        <url-pattern>/donatePage</url-pattern>
+    </servlet-mapping>
+
 
 </web-app>

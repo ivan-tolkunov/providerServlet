@@ -2,6 +2,8 @@ package ua.ivan.provider.servlets.servlet;
 
 import ua.ivan.provider.dao.SitePackageDAO;
 import ua.ivan.provider.dao.UserDAO;
+import ua.ivan.provider.model.Status;
+import ua.ivan.provider.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,9 +19,14 @@ public class UserAddPackageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
             throws IOException, ServletException {
-        request.getSession().setAttribute("user", userDAO.buyUserPackage(
+        User user = userDAO.buyUserPackage(
                 Long.parseLong(request.getParameter("userId")),
-                sitePackageDAO.getById(Long.parseLong(request.getParameter("packageId")))));
-        request.getRequestDispatcher("/user").forward(request, response);
+                sitePackageDAO.getById(Long.parseLong(request.getParameter("packageId"))));
+        request.getSession().setAttribute("user", user);
+        if (user.getStatus().equals(Status.ACTIVE)) {
+            response.sendRedirect("/user");
+        } else {
+            response.sendRedirect("/logout");
+        }
     }
 }

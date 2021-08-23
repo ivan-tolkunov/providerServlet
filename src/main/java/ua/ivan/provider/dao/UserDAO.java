@@ -189,18 +189,20 @@ public class UserDAO {
             Connection con = ConnectionDatabase.initializeDatabase();
             User user = getById(userId);
             user.setBalance(getById(userId).getBalance() - sitePackage.getPrice());
-            if (user.getBalance() >= 0) {
-                String query = "insert into subscribe (user_id, package_id)"
-                        + " values (?, ?)";
-                PreparedStatement st = con.prepareStatement(query);
+            String query = "insert into subscribe (user_id, package_id)"
+                    + " values (?, ?)";
+            PreparedStatement st = con.prepareStatement(query);
 
-                st.setString(1, String.valueOf(userId));
-                st.setString(2, String.valueOf(sitePackage.getId()));
-                st.executeUpdate();
-                st.close();
+            st.setString(1, String.valueOf(userId));
+            st.setString(2, String.valueOf(sitePackage.getId()));
+            st.executeUpdate();
+            st.close();
+            if (user.getBalance() < 0) {
+                updateUserStatus(userId, Status.BANNED);
             }
             con.close();
-            return updateUserBalance(user.getBalance(), userId);
+            updateUserBalance(user.getBalance(), userId);
+            return getById(userId);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -273,6 +275,9 @@ public class UserDAO {
         User user = getById(userId);
         user.setBalance(user.getBalance() + sum);
         rejectDonateQuery(donateId);
+        if (user.getStatus().equals(Status.BANNED)) {
+            updateUserStatus(userId, Status.ACTIVE);
+        }
         return updateUserBalance(user.getBalance(), userId);
     }
 
@@ -328,10 +333,9 @@ public class UserDAO {
         }
     }
 
-    public boolean isSubscriber(Long userId, String type){
+    public boolean isSubscriber(Long userId, String type) {
         return getUserPackages(userId).stream().filter(p -> p.getType().equals(type)).collect(Collectors.toList()).isEmpty();
     }
-
 
 
 }
