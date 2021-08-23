@@ -3,7 +3,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="ua.ivan.provider.model.User" %>
-<%@ page import="ua.ivan.provider.model.Role" %><%--
+<%@ page import="ua.ivan.provider.model.Role" %>
+<%@ page import="ua.ivan.provider.dao.UserDAO" %><%--
   Created by IntelliJ IDEA.
   User: memlo
   Date: 8/18/2021
@@ -34,14 +35,14 @@
         }
 
         .flex:after {
-            content:'';
-            width:100%;
-            order:0;
+            content: '';
+            width: 100%;
+            order: 0;
         }
 
         .item.new-string,
         .item.new-string ~ .item {
-            order:1;
+            order: 1;
         }
 
         .make-size {
@@ -50,28 +51,31 @@
     </style>
 </head>
 <body>
-<%User user = (User)request.getSession().getAttribute("user");%>
+<%
+    User user = (User) request.getSession().getAttribute("user");
+%>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" href="@{/auth/main}">Main page</a>
+                    <a class="nav-link active" href="/main">Main page</a>
                 </li>
                 <% if (user.getRole().equals(Role.ADMIN)) { %>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/admin">Admin Panel</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin">Admin Panel</a>
+                </li>
                 <% } %>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/user"><%=user.getEmail()%></a>
+                    <a class="nav-link active" href="/user"><%=user.getEmail()%>
+                    </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                        aria-haspopup="true" aria-expanded="false">Sort by:</a>
                     <div class="dropdown-menu" style="">
                         <form action="/main/sort" method="get">
-                            <button class="btn btn-link" type="submit" name="method" value="A-Z" >Sort by
+                            <button class="btn btn-link" type="submit" name="method" value="A-Z">Sort by
                                 name(A-Z)
                             </button>
                             <button class="btn btn-link" type="submit" name="method" value="Z-A">Sort by
@@ -83,7 +87,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <form action="#" action="@{/download}" method="post">
+                    <form action="/download" method="get">
                         <button class="btn btn-light" type="submit">Download</button>
                     </form>
                 </li>
@@ -100,7 +104,8 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                   aria-haspopup="true" aria-expanded="false">Balance: <%=user.getBalance()%></a>
+                   aria-haspopup="true" aria-expanded="false">Balance: <%=user.getBalance()%>
+                </a>
                 <div class="dropdown-menu" style="">
                     <form action="/donate" method="post">
                         <input type="hidden" name="user_id" value='<%=user.getId()%>'>
@@ -114,7 +119,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <form action="/logout"  method="get">
+                <form action="/logout" method="get">
                     <button class="btn btn-link" type="submit">Logout</button>
                 </form>
             </li>
@@ -126,17 +131,28 @@
     <div class="flex">
         <%
             List<SitePackage> sitePackages =
-                    (List<SitePackage>)request.getAttribute("sitePackages");
-            for(SitePackage p: sitePackages){%>
+                    (List<SitePackage>) request.getAttribute("sitePackages");
+            for (SitePackage p : sitePackages) {%>
         <div class="card border-dark mb-3 item" style="max-width: 18rem;">
-            <div class="card-header"><%=p.getType()%></div>
+            <div class="card-header"><%=p.getType()%>
+            </div>
             <div class="card-body text-dark">
-                <h5 class="card-title"><%=p.getName()%></h5>
-                <p class="card-text make-size"><%=p.getDescription()%></p>
+                <h5 class="card-title"><%=p.getName()%>
+                </h5>
+                <p class="card-text make-size"><%=p.getDescription()%>
+                </p>
                 <form action="/user/add" method="post">
-                    <input type="hidden" name="packageId" value='<%=p.getId()%>' />
-                    <input type="hidden" name="userId" value='<%=user.getId()%>' />
-                    <button type="submit" class="btn btn-primary" >Add</button>
+                    <input type="hidden" name="packageId" value='<%=p.getId()%>'/>
+                    <input type="hidden" name="userId" value='<%=user.getId()%>'/>
+                    <%if (p.getType().equals("Internet")) {%>
+                        <button type="submit" class="btn btn-primary" <% if ((boolean)request.getAttribute("subInternet")) {%>disabled<%}%> >Add</button>
+                    <%}%>
+                    <%if (p.getType().equals("Cellular communication")) {%>
+                        <button type="submit" class="btn btn-primary" <% if ((boolean)request.getAttribute("subTelephone")) {%>disabled<%}%> >Add</button>
+                    <%}%>
+                    <%if (p.getType().equals("IP-TV")) {%>
+                        <button type="submit" class="btn btn-primary" <% if ((boolean)request.getAttribute("subIPTV")) {%>disabled<%}%> >Add</button>
+                    <%}%>
                 </form>
             </div>
         </div>

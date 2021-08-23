@@ -193,5 +193,15 @@
         <url-pattern>/main/sort</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>DownloadServlet</servlet-name>
+        <servlet-class>ua.ivan.provider.servlets.servlet.DownloadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DownloadServlet</servlet-name>
+        <url-pattern>/download</url-pattern>
+    </servlet-mapping>
+
 
 </web-app>
