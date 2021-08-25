@@ -26,8 +26,11 @@ public class LogoutServlet extends HttpServlet {
         session.removeAttribute("role");
         session.removeAttribute("user");
         session.removeAttribute("userFirst");
-
-        resp.sendRedirect("/login");
+        if ("2".equals(req.getParameter("error"))) {
+            resp.sendRedirect("/login?error=2");
+        } else {
+            resp.sendRedirect("/login");
+        }
     }
 
 }

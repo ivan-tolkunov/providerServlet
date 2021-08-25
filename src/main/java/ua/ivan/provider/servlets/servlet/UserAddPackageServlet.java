@@ -26,7 +26,7 @@ public class UserAddPackageServlet extends HttpServlet {
         if (user.getStatus().equals(Status.ACTIVE)) {
             response.sendRedirect("/user");
         } else {
-            response.sendRedirect("/logout");
+            response.sendRedirect("/logout?error=2");
         }
     }
 }

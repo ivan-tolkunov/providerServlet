@@ -1,21 +1,21 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="ua.ivan.provider.model.SitePackage" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="ua.ivan.provider.model.User" %>
 <%@ page import="ua.ivan.provider.model.Role" %>
-<%@ page import="ua.ivan.provider.dao.UserDAO" %><%--
-  Created by IntelliJ IDEA.
-  User: memlo
-  Date: 8/18/2021
-  Time: 1:51 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="ua.ivan.provider.dao.UserDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<fmt:setLocale value="${language}" />
+<fmt:setBundle basename="messages" />
+<!DOCTYPE html>
+<html lang="${language}">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title><fmt:message key="main.page" /></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
@@ -59,36 +59,30 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/main">Main page</a>
+                    <a class="nav-link active" href="/main"><fmt:message key="main.page" /></a>
                 </li>
                 <% if (user.getRole().equals(Role.ADMIN)) { %>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/admin">Admin Panel</a>
+                    <a class="nav-link active" href="/admin"><fmt:message key="admin.panel" /></a>
                 </li>
                 <% } %>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/user"><%=user.getEmail()%>
-                    </a>
+                    <a class="nav-link active" href="/user"><%=user.getEmail()%></a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                       aria-haspopup="true" aria-expanded="false">Sort by:</a>
+                       aria-haspopup="true" aria-expanded="false"><fmt:message key="cabinet.sort" /></a>
                     <div class="dropdown-menu" style="">
                         <form action="/main/sort" method="get">
-                            <button class="btn btn-link" type="submit" name="method" value="A-Z">Sort by
-                                name(A-Z)
-                            </button>
-                            <button class="btn btn-link" type="submit" name="method" value="Z-A">Sort by
-                                name(Z-A)
-                            </button>
-                            <button class="btn btn-link" type="submit" name="method" value="price">Sort by price
-                            </button>
+                            <button class="btn btn-link" type="submit" name="method" value="A-Z"><fmt:message key="cabinet.sort.az" /></button>
+                            <button class="btn btn-link" type="submit" name="method" value="Z-A"><fmt:message key="cabinet.sort.za" /></button>
+                            <button class="btn btn-link" type="submit" name="method" value="price"><fmt:message key="cabinet.sort.price" /></button>
                         </form>
                     </div>
                 </li>
                 <li class="nav-item">
                     <form action="/download" method="get">
-                        <button class="btn btn-light" type="submit">Download</button>
+                        <button class="btn btn-light" type="submit"><fmt:message key="label.download" /></button>
                     </form>
                 </li>
             </ul>
@@ -96,31 +90,27 @@
         <ul class="nav nav-pills">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                   aria-haspopup="true" aria-expanded="false">Language</a>
+                   aria-haspopup="true" aria-expanded="false"><fmt:message key="language" /></a>
                 <div class="dropdown-menu" style="">
-                    <a class="dropdown-item" href="/changeLanguage?language=ukr">Ukrainian</a>
-                    <a class="dropdown-item" href="/changeLanguage?language=en">English</a>
+                    <a class="dropdown-item" href="?language=ukr"><fmt:message key="language.ukr" /></a>
+                    <a class="dropdown-item" href="?language=en"><fmt:message key="language.en" /></a>
                 </div>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                   aria-haspopup="true" aria-expanded="false">Balance: <%=user.getBalance()%>
-                </a>
+                   aria-haspopup="true" aria-expanded="false"><fmt:message key="label.balance" /> <%=request.getSession().getAttribute("userBalance")%></a>
                 <div class="dropdown-menu" style="">
                     <form action="/donate" method="post">
                         <input type="hidden" name="user_id" value='<%=user.getId()%>'>
-                        <button class="btn btn-link" type="submit" name="sum" value="200">200 UAH
-                        </button>
-                        <button class="btn btn-link" type="submit" name="sum" value="500">500 UAH
-                        </button>
-                        <button class="btn btn-link" type="submit" name="sum" value="1000">1000 UAH
-                        </button>
+                        <button class="btn btn-link" type="submit" name="sum" value="200">200 <fmt:message key="label.grivna" /></button>
+                        <button class="btn btn-link" type="submit" name="sum" value="500">500 <fmt:message key="label.grivna" /></button>
+                        <button class="btn btn-link" type="submit" name="sum" value="1000">1000 <fmt:message key="label.grivna" /></button>
                     </form>
                 </div>
             </li>
             <li class="nav-item">
                 <form action="/logout" method="get">
-                    <button class="btn btn-link" type="submit">Logout</button>
+                    <button class="btn btn-link" type="submit"><fmt:message key="label.logout" /></button>
                 </form>
             </li>
         </ul>
@@ -145,13 +135,13 @@
                     <input type="hidden" name="packageId" value='<%=p.getId()%>'/>
                     <input type="hidden" name="userId" value='<%=user.getId()%>'/>
                     <%if (p.getType().equals("Internet")) {%>
-                        <button type="submit" class="btn btn-primary" <% if ((boolean)request.getAttribute("subInternet")) {%>disabled<%}%> >Add</button>
+                        <button type="submit" class="btn btn-primary" <% if ((boolean)request.getAttribute("subInternet")) {%>disabled<%}%> ><fmt:message key="label.add" /></button>
                     <%}%>
                     <%if (p.getType().equals("Cellular communication")) {%>
-                        <button type="submit" class="btn btn-primary" <% if ((boolean)request.getAttribute("subTelephone")) {%>disabled<%}%> >Add</button>
+                        <button type="submit" class="btn btn-primary" <% if ((boolean)request.getAttribute("subTelephone")) {%>disabled<%}%> ><fmt:message key="label.add" /></button>
                     <%}%>
                     <%if (p.getType().equals("IP-TV")) {%>
-                        <button type="submit" class="btn btn-primary" <% if ((boolean)request.getAttribute("subIPTV")) {%>disabled<%}%> >Add</button>
+                        <button type="submit" class="btn btn-primary" <% if ((boolean)request.getAttribute("subIPTV")) {%>disabled<%}%> ><fmt:message key="label.add" /></button>
                     <%}%>
                 </form>
             </div>

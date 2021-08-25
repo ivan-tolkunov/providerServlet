@@ -19,6 +19,7 @@ public class MainPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("sitePackages", sitePackageDAO.sortByMethodPackages(req.getParameter("method"), sitePackageDAO.getAllPackages()));
         User user = (User)req.getSession().getAttribute("user");
+        req.getSession().setAttribute("userBalance", userDAO.getUserBalance(user.getId()));
         req.setAttribute("subInternet", !userDAO.isSubscriber(user.getId(), "Internet"));
         req.setAttribute("subTelephone", !userDAO.isSubscriber(user.getId(), "Cellular communication"));
         req.setAttribute("subIPTV", !userDAO.isSubscriber(user.getId(), "IP-TV"));
@@ -29,6 +30,7 @@ public class MainPageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("sitePackages", sitePackageDAO.sortByMethodPackages(req.getParameter("method"), sitePackageDAO.getAllPackages()));
         User user = (User)req.getSession().getAttribute("user");
+        req.getSession().setAttribute("userBalance", userDAO.getUserBalance(user.getId()));
         req.setAttribute("subInternet", !userDAO.isSubscriber(user.getId(), "Internet"));
         req.setAttribute("subTelephone", !userDAO.isSubscriber(user.getId(), "Cellular communication"));
         req.setAttribute("subIPTV", !userDAO.isSubscriber(user.getId(), "IP-TV"));

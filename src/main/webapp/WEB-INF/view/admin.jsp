@@ -1,18 +1,18 @@
 <%@ page import="java.util.List" %>
 <%@ page import="ua.ivan.provider.model.User" %>
 <%@ page import="ua.ivan.provider.model.Donate" %>
-<%@ page import="ua.ivan.provider.model.Status" %><%--
-  Created by IntelliJ IDEA.
-  User: memlo
-  Date: 8/20/2021
-  Time: 12:35 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ page import="ua.ivan.provider.model.Status" %>
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<fmt:setLocale value="${language}" />
+<fmt:setBundle basename="messages" />
+<!DOCTYPE html>
+<html lang="${language}">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title><fmt:message key="admin.title" /></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
@@ -35,24 +35,23 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/main">Main page</a>
+                    <a class="nav-link active" href="/main"><fmt:message key="main.page" /></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/user"><%=user.getEmail()%>
-                    </a>
+                    <a class="nav-link active" href="/user"><%=user.getEmail()%></a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                       aria-haspopup="true" aria-expanded="false">Admin action</a>
+                       aria-haspopup="true" aria-expanded="false"><fmt:message key="admin.action" /></a>
                     <div class="dropdown-menu" style="">
                         <form action="/register" method="get">
-                            <button class="btn btn-link" type="submit">Register new user</button>
+                            <button class="btn btn-link" type="submit"><fmt:message key="registration" /></button>
                         </form>
                         <form action="/admin/editPackagePage" method="get">
-                            <button class="btn btn-link" type="submit">Edit packages</button>
+                            <button class="btn btn-link" type="submit"><fmt:message key="admin.edit.new.package" /></button>
                         </form>
                         <form action="/admin/addPackage" method="get">
-                            <button class="btn btn-link" type="submit">Add new package</button>
+                            <button class="btn btn-link" type="submit"><fmt:message key="admin.add.new.package" /></button>
                         </form>
                     </div>
                 </li>
@@ -61,26 +60,26 @@
         <ul class="nav nav-pills">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                   aria-haspopup="true" aria-expanded="false">Language</a>
+                   aria-haspopup="true" aria-expanded="false"><fmt:message key="language" /></a>
                 <div class="dropdown-menu" style="">
-                    <a class="dropdown-item" href="/changeLanguage?language=ukr">Ukrainian</a>
-                    <a class="dropdown-item" href="/changeLanguage?language=en">English</a>
+                    <a class="dropdown-item" href="?language=ukr"><fmt:message key="language.ukr" /></a>
+                    <a class="dropdown-item" href="?language=en"><fmt:message key="language.en" /></a>
                 </div>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                   aria-haspopup="true" aria-expanded="false">Balance: <%=user.getBalance()%></a>
+                   aria-haspopup="true" aria-expanded="false"><fmt:message key="label.balance" /> <%=request.getSession().getAttribute("userBalance")%></a>
                 <div class="dropdown-menu" style="">
                     <form action="/donate" method="post">
-                        <button class="btn btn-link" type="submit" name="sum" value="200">200 UAH</button>
-                        <button class="btn btn-link" type="submit" name="sum" value="500">500 UAH</button>
-                        <button class="btn btn-link" type="submit" name="sum" value="1000">1000 UAH</button>
+                        <button class="btn btn-link" type="submit" name="sum" value="200">200 <fmt:message key="label.grivna" /></button>
+                        <button class="btn btn-link" type="submit" name="sum" value="500">500 <fmt:message key="label.grivna" /></button>
+                        <button class="btn btn-link" type="submit" name="sum" value="1000">1000 <fmt:message key="label.grivna" /></button>
                     </form>
                 </div>
             </li>
             <li class="nav-item">
                 <form action="/logout" method="get">
-                    <button class="btn btn-link" type="submit">Logout</button>
+                    <button class="btn btn-link" type="submit"><fmt:message key="label.logout" /></button>
                 </form>
             </li>
         </ul>
@@ -95,10 +94,10 @@
         <table class="table">
             <thead class="thead-dark">
             <tr>
-                <th>Email</th>
-                <th>Balance</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th><fmt:message key="label.email" /></th>
+                <th><fmt:message key="label.balance" /></th>
+                <th><fmt:message key="label.status" /></th>
+                <th><fmt:message key="label.action" /></th>
             </tr>
             </thead>
             <tbody>
@@ -114,10 +113,10 @@
                     <form action="/changeUserStatus" method="post">
                         <% if (u.getStatus().equals(Status.ACTIVE)) {%>
                             <input type="hidden" name="status" value='<%=Status.BANNED%>'>
-                            <button type="submit" class="btn btn-outline-danger" value='<%=u.getId()%>' name="user_id">Ban</button>
+                            <button type="submit" class="btn btn-outline-danger" value='<%=u.getId()%>' name="user_id"><fmt:message key="label.ban" /></button>
                         <%} else {%>
                             <input type="hidden" name="status" value='<%=Status.ACTIVE%>'>
-                            <button type="submit" class="btn btn-outline-success" value='<%=u.getId()%>' name="user_id">Unban</button>
+                            <button type="submit" class="btn btn-outline-success" value='<%=u.getId()%>' name="user_id"><fmt:message key="label.unban" /></button>
                         <%}%>
                     </form>
                 </td>
@@ -133,8 +132,8 @@
         <table class="table">
             <thead class="thead-dark">
             <tr>
-                <th>Email</th>
-                <th>Sum</th>
+                <th><fmt:message key="label.email" /></th>
+                <th><fmt:message key="label.balance" /></th>
                 <th></th>
                 <th></th>
             </tr>
@@ -149,13 +148,13 @@
                         <form action="/donateAction" method="post">
                             <input type="hidden" value='<%=d.getUser().getId()%>' name="id_user"/>
                             <input type="hidden" value='<%=d.getId()%>' name="id_donate"/>
-                            <button type="submit" class="btn btn-success" value='<%=d.getSum()%>' name="sum">Сonfirm</button>
+                            <button type="submit" class="btn btn-success" value='<%=d.getSum()%>' name="sum"><fmt:message key="label.confirm" /></button>
                         </form>
                     </div>
                 </td>
                 <td>
                     <form action="/donateAction" method="post">
-                        <button type="submit" class="btn btn-outline-danger" value='<%=d.getId()%>' name="id_donate">Reject</button>
+                        <button type="submit" class="btn btn-outline-danger" value='<%=d.getId()%>' name="id_donate"><fmt:message key="label.reject" /></button>
                     </form>
                 </td>
             </tr>

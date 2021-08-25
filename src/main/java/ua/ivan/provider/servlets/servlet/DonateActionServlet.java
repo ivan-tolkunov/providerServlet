@@ -16,10 +16,9 @@ public class DonateActionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("sum") != null) {
-            request.getSession().setAttribute("user",
             userDAO.acceptDonateQuery(Long.parseLong(request.getParameter("id_user")),
                     Integer.parseInt(request.getParameter("sum")),
-                    Long.parseLong(request.getParameter("id_donate"))));
+                    Long.parseLong(request.getParameter("id_donate")));
         } else {
             userDAO.rejectDonateQuery(Long.parseLong(request.getParameter("id_donate")));
         }

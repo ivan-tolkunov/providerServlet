@@ -23,7 +23,7 @@ public class DonateServlet extends HttpServlet {
         if (userDAO.getById(Long.parseLong(request.getParameter("user_id"))).getStatus().equals(Status.ACTIVE)) {
             response.sendRedirect("/main");
         } else {
-            response.sendRedirect("/");
+            response.sendRedirect("/logout");
         }
     }
 }

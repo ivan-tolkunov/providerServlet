@@ -58,7 +58,9 @@ public class AuthFilter implements Filter {
             moveToMenu(req, res, userFirst);
 
         } else {
-            moveToMenu(req, res, new User());
+            User newUser = new User();
+            newUser.setRole(Role.UNKNOWN);
+            moveToMenu(req, res, newUser);
         }
     }
 
@@ -77,9 +79,8 @@ public class AuthFilter implements Filter {
             } else {
                 req.getRequestDispatcher("/donatePage").forward(req, res);
             }
-
         } else {
-            req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, res);
+            res.sendRedirect("/login?error=1");
         }
     }
 

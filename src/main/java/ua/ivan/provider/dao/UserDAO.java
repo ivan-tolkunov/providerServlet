@@ -228,6 +228,27 @@ public class UserDAO {
         }
     }
 
+    public int getUserBalance(Long userId) {
+        int res = 0;
+        try {
+            Connection con = ConnectionDatabase.initializeDatabase();
+
+            String query = "select balance from user where id = ?";
+            PreparedStatement st = con.prepareStatement(query);
+            st.setString(1, Long.toString(userId));
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                res = Integer.parseInt(rs.getString(1));
+            }
+            st.close();
+            con.close();
+            return res;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     public boolean makeDonateQuery(Long userId, int sum) {
         try {
             Connection con = ConnectionDatabase.initializeDatabase();

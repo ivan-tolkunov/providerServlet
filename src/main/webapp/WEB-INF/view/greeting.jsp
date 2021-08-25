@@ -1,12 +1,18 @@
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<fmt:setLocale value="${language}" />
+<fmt:setBundle basename="messages" />
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${language}">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-  <title>Internet service provider</title>
+  <title><fmt:message key="index.title" /></title>
   <style>
     .content_index {
       margin: 50px auto;
@@ -26,54 +32,46 @@
   <ul class="nav nav-pills">
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-         aria-expanded="false">Language</a>
+         aria-expanded="false"><fmt:message key="language" /></a>
       <div class="dropdown-menu" style="">
-        <a class="dropdown-item" href="/changeLanguage?language=ukr">Ukrainian</a>
-        <a class="dropdown-item" href="/changeLanguage?language=en">English</a>
+        <a class="dropdown-item" href="?language=ukr"><fmt:message key="language.ukr" /></a>
+        <a class="dropdown-item" href="?language=en"><fmt:message key="language.en" /></a>
       </div>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/login">Login</a>
+      <a class="nav-link" href="/login"><fmt:message key="login" /></a>
     </li>
   </ul>
 </nav>
 <div class="content_index">
   <div class="title">
     <center>
-      <h1>Internet service provider</h1>
+      <h1><fmt:message key="index.title" /></h1>
     </center>
   </div>
   <div class="description">
-    <p>Internet Service Provider is an organization that provides Internet access services and other Internet-related
-      services.</p>
-    <p>The main services of an internet service provider include:</p>
+    <p><fmt:message key="index.introduction" /></p>
+    <p><fmt:message key="index.list.one.label" /></p>
     <ol class="list-group list-group-numbered">
-      <li class="list-group-item"><i>Broadband internet</i></li>
-      <li class="list-group-item"><i>Dial-up Internet access</i></li>
-      <li class="list-group-item"><i>Allocation of disk space for storing and ensuring the operation of sites
-        (hosting)</i>
-      </li>
-      <li class="list-group-item"><i>Support for e-mailboxes or virtual mail server</i></li>
-      <li class="list-group-item"><i>Placement of client equipment at the provider's site (colocation)</i></li>
-      <li class="list-group-item"><i>Rent of dedicated and virtual servers (VPS, VDS)</i></li>
-      <li class="list-group-item"><i>Data backup</i></li>
+      <li class="list-group-item"><i><fmt:message key="index.list.one.first" /></i></li>
+      <li class="list-group-item"><i><fmt:message key="index.list.one.second" /></i></li>
+      <li class="list-group-item"><i><fmt:message key="index.list.one.third" /></i></li>
+      <li class="list-group-item"><i><fmt:message key="index.list.one.fourth" /></i></li>
+      <li class="list-group-item"><i><fmt:message key="index.list.one.fives" /></i></li>
+      <li class="list-group-item"><i><fmt:message key="index.list.one.sixth" /></i></li>
+      <li class="list-group-item"><i><fmt:message key="index.list.one.seventh" /></i></li>
     </ol>
     <br>
-    <p>According to the services provided, they can be divided into categories:</p>
+    <p><fmt:message key="index.list.two.label" /></p>
     <ol class="list-group list-group-numbered">
-      <li class="list-group-item"><i>Access Providers</i></li>
-      <li class="list-group-item"><i>Hosting providers</i></li>
-      <li class="list-group-item"><i>Backbone providers</i></li>
-      <li class="list-group-item"><i>Channel providers</i></li>
-      <li class="list-group-item"><i>Last mile providers</i></li>
+      <li class="list-group-item"><i><fmt:message key="index.list.two.first" /></i></li>
+      <li class="list-group-item"><i><fmt:message key="index.list.two.second" /></i></li>
+      <li class="list-group-item"><i><fmt:message key="index.list.two.third" /></i></li>
+      <li class="list-group-item"><i><fmt:message key="index.list.two.fourth" /></i></li>
+      <li class="list-group-item"><i><fmt:message key="index.list.two.fives" /></i></li>
     </ol>
     <br>
-    <p>
-      Among the access providers, one can distinguish primary (backbone) ones, which have backbone communication
-      channels in their ownership, and secondary (city, house), leasing communication channels from the primary ones.
-      Primary providers usually sell traffic only in large volumes and provide services to providers other than
-      individual users, although there are exceptions.
-    </p>
+    <p><fmt:message key="index.conclusion" /></p>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
