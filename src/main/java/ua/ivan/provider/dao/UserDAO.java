@@ -1,9 +1,14 @@
 package ua.ivan.provider.dao;
 
 
+import ua.ivan.provider.controller.BCrypt;
 import ua.ivan.provider.controller.ConnectionDatabase;
 import ua.ivan.provider.model.*;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -113,6 +118,8 @@ public class UserDAO {
         try {
 
             Connection con = ConnectionDatabase.initializeDatabase();
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
+
 
             String query = "insert into user (email, first_name, last_name, password)"
                     + " values (?, ?, ?, ?)";
@@ -121,7 +128,7 @@ public class UserDAO {
             st.setString(1, email);
             st.setString(2, firstName);
             st.setString(3, lastName);
-            st.setString(4, password);
+            st.setString(4, hashedPassword);
 
             st.executeUpdate();
             st.close();
@@ -152,7 +159,7 @@ public class UserDAO {
         boolean result = false;
 
         for (User user : getAllUsers()) {
-            if (user.getEmail().equals(login) && user.getPassword().equals(password)) {
+            if (user.getEmail().equals(login) && BCrypt.checkpw(password, user.getPassword())) {
                 result = true;
                 break;
             }

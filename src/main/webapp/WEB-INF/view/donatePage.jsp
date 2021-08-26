@@ -13,18 +13,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
-        a {
-            text-decoration: none;
-        }
-
         form {
             max-width: 600px;
             margin: 200px auto;
         }
 
-        button {
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
@@ -46,12 +39,10 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link"><fmt:message key="label.balance" /> <%=request.getSession().getAttribute("userBalance")%></a>
+                <a class="nav-link"><fmt:message key="label.balance" /> <%=request.getAttribute("userBalance")%></a>
             </li>
             <li class="nav-item">
-                <form action="/logout" method="get">
-                    <button class="btn btn-link" type="submit"><fmt:message key="label.logout" /></button>
-                </form>
+                <a class="nav-link" href="/logout"><fmt:message key="label.logout" /></a>
             </li>
         </ul>
     </div>

@@ -24,6 +24,7 @@ public class UserAddPackageServlet extends HttpServlet {
                 sitePackageDAO.getById(Long.parseLong(request.getParameter("packageId"))));
         request.getSession().setAttribute("user", user);
         if (user.getStatus().equals(Status.ACTIVE)) {
+            request.getSession().setAttribute("userBalance", userDAO.getUserBalance(user.getId()));
             response.sendRedirect("/user");
         } else {
             response.sendRedirect("/logout?error=2");

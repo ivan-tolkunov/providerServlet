@@ -42,7 +42,7 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/login"><fmt:message key="login" /></a>
+            <a class="nav-link" href="/admin"><fmt:message key="admin.title" /></a>
         </li>
     </ul>
 </nav>

@@ -1,15 +1,24 @@
 package ua.ivan.provider.servlets.filter;
 
+import ua.ivan.provider.controller.BCrypt;
 import ua.ivan.provider.dao.UserDAO;
 import ua.ivan.provider.model.Role;
 import ua.ivan.provider.model.Status;
 import ua.ivan.provider.model.User;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.nonNull;
@@ -31,14 +40,12 @@ public class AuthFilter implements Filter {
 
         final String email = req.getParameter("email");
         final String password = req.getParameter("password");
-        User user = (User)req.getSession().getAttribute("user");
+        User user = (User) req.getSession().getAttribute("user");
 
 
-        @SuppressWarnings("unchecked")
-        final AtomicReference<UserDAO> dao = (AtomicReference<UserDAO>) req.getServletContext().getAttribute("dao");
+        @SuppressWarnings("unchecked") final AtomicReference<UserDAO> dao = (AtomicReference<UserDAO>) req.getServletContext().getAttribute("dao");
 
         final HttpSession session = req.getSession();
-//        Logged user.
         if (nonNull(session) &&
                 nonNull(session.getAttribute("email")) &&
                 nonNull(session.getAttribute("password"))) {
@@ -77,6 +84,7 @@ public class AuthFilter implements Filter {
             if (user.getStatus().equals(Status.ACTIVE)) {
                 req.getRequestDispatcher("/main").forward(req, res);
             } else {
+                req.setAttribute("userBalance", user.getBalance());
                 req.getRequestDispatcher("/donatePage").forward(req, res);
             }
         } else {

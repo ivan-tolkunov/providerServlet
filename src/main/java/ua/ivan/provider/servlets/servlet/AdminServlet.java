@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import static java.util.Objects.nonNull;
 
 public class AdminServlet extends HttpServlet {
     UserDAO userDAO = new UserDAO();
@@ -16,24 +17,32 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("user");
-        if (user.getRole().equals(Role.ADMIN)) {
-            req.setAttribute("listOfUsers", userDAO.getAllUsers());
-            req.setAttribute("listOfDonates", userDAO.getAllDonateQuery());
-            req.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(req, resp);
+        if (nonNull(user)) {
+            if (user.getRole().equals(Role.ADMIN)) {
+                req.setAttribute("listOfUsers", userDAO.getAllUsers());
+                req.setAttribute("listOfDonates", userDAO.getAllDonateQuery());
+                req.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(req, resp);
+            } else {
+                req.getRequestDispatcher("/main").forward(req, resp);
+            }
         } else {
-            req.getRequestDispatcher("/main").forward(req, resp);
+            resp.sendRedirect("/login");
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("user");
-        if (user.getRole().equals(Role.ADMIN)) {
-            req.setAttribute("listOfUsers", userDAO.getAllUsers());
-            req.setAttribute("listOfDonates", userDAO.getAllDonateQuery());
-            req.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(req, resp);
+        if (nonNull(user)) {
+            if (user.getRole().equals(Role.ADMIN)) {
+                req.setAttribute("listOfUsers", userDAO.getAllUsers());
+                req.setAttribute("listOfDonates", userDAO.getAllDonateQuery());
+                req.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(req, resp);
+            } else {
+                req.getRequestDispatcher("/main").forward(req, resp);
+            }
         } else {
-            req.getRequestDispatcher("/main").forward(req, resp);
+            resp.sendRedirect("/login");
         }
     }
 }
