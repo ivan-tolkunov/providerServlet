@@ -4,11 +4,6 @@ package ua.ivan.provider.dao;
 import ua.ivan.provider.controller.BCrypt;
 import ua.ivan.provider.controller.ConnectionDatabase;
 import ua.ivan.provider.model.*;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.SecureRandom;
-import java.security.spec.KeySpec;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

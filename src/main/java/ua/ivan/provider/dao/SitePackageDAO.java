@@ -72,6 +72,34 @@ public class SitePackageDAO {
         return sitePackage;
     }
 
+    public SitePackage getByName(String name) {
+        SitePackage sitePackage = new SitePackage();
+        try {
+            String query = "SELECT * FROM packages WHERE name = ?";
+            Connection con = ConnectionDatabase.initializeDatabase();
+            PreparedStatement st = con.prepareStatement(query);
+            st.setString(1, name);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                sitePackage.setId(Long.parseLong(rs.getString(1)));
+                sitePackage.setName(rs.getString(2));
+                sitePackage.setDescription(rs.getString(3));
+                sitePackage.setPrice(Integer.parseInt(rs.getString(4)));
+                sitePackage.setType(rs.getString(5));
+            }
+
+            rs.close();
+            st.close();
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return sitePackage;
+    }
+
     public boolean addNewPackage(String name, String description, String price, String type) {
         try {
             String query = "insert into packages (name, description, price, type)"

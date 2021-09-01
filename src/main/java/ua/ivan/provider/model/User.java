@@ -1,5 +1,7 @@
 package ua.ivan.provider.model;
 
+import java.util.Objects;
+
 public class User {
     private Long id;
     private String email;
@@ -74,6 +76,18 @@ public class User {
         this.balance = balance;
     }
 
+    public boolean equals(Object obj){
+        User emp = (User) obj;
+        boolean status = false;
+        if (obj != null) {
+            if (Objects.equals(this.getEmail(), emp.getEmail())
+                    && Objects.equals(this.getId(), emp.getId())
+                    && Objects.equals(this.getPassword(), emp.getPassword())) {
+                status = true;
+            }
+        }
+        return status;
+    }
     @Override
     public String toString() {
         return "User{" +
